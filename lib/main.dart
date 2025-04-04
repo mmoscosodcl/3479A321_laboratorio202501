@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       persistentFooterButtons: footerOptions,
+  
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
