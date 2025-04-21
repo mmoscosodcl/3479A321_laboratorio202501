@@ -10,7 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
 
@@ -21,11 +21,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Laboratorio 3',
       theme: ThemeData(
+        primarySwatch: Colors.yellow,
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white, // Text color
+            backgroundColor: Colors.blue, // Background color
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            textStyle: TextStyle(fontSize: 16),
+          ),
+        ),  
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.purple,
-          // TRY THIS: Change to "Brightness.light"
-          //           and see that all colors change
-          //           to better contrast a light background.
           brightness: Brightness.dark,
         ),
         textTheme: TextTheme(
@@ -33,10 +39,6 @@ class MyApp extends StatelessWidget {
             fontSize: 72,
             fontWeight: FontWeight.bold,
           ),
-          // TRY THIS: Change one of the GoogleFonts
-          //           to "lato", "poppins", or "lora".
-          //           The title uses "titleLarge"
-          //           and the middle text uses "bodyMedium".
           titleLarge: GoogleFonts.oswald(
             fontSize: 30,
             fontStyle: FontStyle.italic,
