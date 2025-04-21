@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +29,9 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 136, 248)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 1, 10, 17)
       ),
-      home: const MyHomePage(title: 'Laboratorio 3 problema con user en GIT'),
+      home: const MyHomePage(title: 'Laboratorio 3'),
     );
   }
 }
@@ -55,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  //final String assetName = 'assets/icons/mobile_device_app_icon.svg';
 
   void _incrementCounter() {
     setState(() {
@@ -129,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SvgPicture.asset('assets/icons/mobile.svg',semanticsLabel: 'Dart Logo',),
             const Text('Usted a pulsado el boton las siguientes veces:'),
             Text(
               '$_counter',
