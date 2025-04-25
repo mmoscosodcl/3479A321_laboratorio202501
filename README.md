@@ -25,4 +25,6 @@ mindmap
       B1[Subtopic B1]
       B2[Subtopic B2]
     C[Google Link]
-      click C href "https://www.google.com" "Go to Google"
+```
+
+**Note:** Click [Google Link](https://www.google.com) to visit Google.
