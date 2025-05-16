@@ -98,12 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
  
 
-  void _resetCounter() {
-    setState(() {
-      _counter = 0;
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SvgPicture.asset('assets/icons/mobile.svg',semanticsLabel: 'Dart Logo',),
-                if (context.watch<AppData>().name != null)
                 Text(
-                  '${context.watch<AppData>().name}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+                context.watch<AppData>().name,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               const Text('Usted a pulsado el boton las siguientes veces:'),
               Text(
                 '${context.watch<AppData>().counter}',
