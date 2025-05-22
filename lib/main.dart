@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<AppData>(
       create: (context) => AppData(),
       child: MaterialApp(
-      title: 'Laboratorio 3',
+      title: 'Laboratorio 2025/01',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.purple,
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           displaySmall: GoogleFonts.pacifico(),
         ),
       ),
-      home: const MyHomePage(title: 'Laboratorio 3'),
+      home: const MyHomePage(title: 'Laboratorio 2025/01'),
       )
     );
   }

@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:application_laboratorio202501/pages/about.dart';
 import 'package:application_laboratorio202501/pages/list_labs.dart';
+import 'package:application_laboratorio202501/pages/preference.dart';
 import 'package:application_laboratorio202501/provider/counter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -12,14 +16,12 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() {
-    var logger = Logger();
-    logger.d("create state");
-    return _MyHomePageState();
-  }
+  State<MyHomePage> createState() => _MyHomePageState();
+  
 }
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool _isResetEnabled = false;
 
   _MyHomePageState() {
     var logger = Logger();
@@ -32,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     var logger = Logger();
     logger.d("initState");
+    _loadPreferences();
   }
 
   @override
@@ -67,7 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
     logger.d("deactivate");
   }
 
-
+  Future<void> _loadPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isResetEnabled = prefs.getBool('isResetEnabled') ?? false;
+    });
+  }
 
 
 
@@ -106,11 +114,69 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      title: Text(widget.title),
+      actions: [
+        IconButton(
+        icon: const Icon(Icons.account_circle),
+        tooltip: 'User Profile',
+        onPressed: () {
+          Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const About()),
+          );
+        },
+        ),
+        PopupMenuButton<String>(
+        onSelected: (value) {
+          switch (value) {
+          case 'list':
+            Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ListLabs()),
+            );
+            break;
+          case 'about':
+            Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const About()),
+            );
+            break;
+          case 'settings':
+            Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PreferencePage()),
+            ).then((_) {
+              _loadPreferences();
+            });
+;
+            break;
+          }
+        },
+        itemBuilder: (context) => [
+          const PopupMenuItem(
+          value: 'list',
+          child: ListTile(
+            leading: Icon(Icons.list),
+            title: Text('List'),
+          ),
+          ),
+          const PopupMenuItem(
+          value: 'about',
+          child: ListTile(
+            leading: Icon(Icons.info),
+            title: Text('About'),
+          ),
+          ),
+          const PopupMenuItem(
+          value: 'settings',
+          child: ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
+          ),
+          ),
+        ],
+        ),
+      ],
       ),
       persistentFooterButtons: footerOptions,
-  
+      
       body: Center(
         child: Card(
           elevation: 10,
@@ -151,14 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return [
       TextButton(onPressed: context.read<AppData>().increment, child: Icon(Icons.add)),
       TextButton(onPressed: context.read<AppData>().decrement, child: Icon(Icons.remove)),
-      Selector<AppData, bool>(
-        selector: (_, appData) => appData.isResetEnabled,
-        builder: (context, isResetEnabled, child) {
-          return TextButton(
-        onPressed: isResetEnabled ? context.read<AppData>().resetCounter : null,
+      TextButton(
+        onPressed: _isResetEnabled ? context.read<AppData>().resetCounter : null,
         child: Icon(Icons.clean_hands),
-          );
-        },
       ),
     ];
   }
