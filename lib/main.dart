@@ -1,11 +1,18 @@
 import 'package:application_laboratorio202501/pages/my_home_page.dart';
 import 'package:application_laboratorio202501/provider/counter_provider.dart';
+import 'package:application_laboratorio202501/services/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the database
+  await DatabaseHelper().initializeDatabase();
+
   runApp(const MyApp());
 }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:application_laboratorio202501/pages/about.dart';
+import 'package:application_laboratorio202501/pages/activity_page.dart';
 import 'package:application_laboratorio202501/pages/list_labs.dart';
 import 'package:application_laboratorio202501/pages/preference.dart';
 import 'package:application_laboratorio202501/provider/counter_provider.dart';
@@ -134,6 +135,11 @@ class _MyHomePageState extends State<MyHomePage> {
             MaterialPageRoute(builder: (context) => ListLabs()),
             );
             break;
+          case 'activity':
+            Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ActivityPage()),
+            );
+            break;
           case 'about':
             Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const About()),
@@ -151,11 +157,18 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         itemBuilder: (context) => [
           const PopupMenuItem(
-          value: 'list',
-          child: ListTile(
-            leading: Icon(Icons.list),
-            title: Text('List'),
+            value: 'list',
+            child: ListTile(
+              leading: Icon(Icons.list),
+              title: Text('List'),
+            ),
           ),
+          const PopupMenuItem(
+            value: 'activity',
+            child: ListTile(
+              leading: Icon(Icons.note_add),
+              title: Text('Activity'),
+            ),
           ),
           const PopupMenuItem(
           value: 'about',
