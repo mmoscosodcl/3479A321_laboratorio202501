@@ -9,7 +9,6 @@ class Activity {
     required this.name,
   });
 
-  // Convert Activity to Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -18,7 +17,6 @@ class Activity {
     };
   }
 
-  // Create Activity from Map
   factory Activity.fromMap(Map<String, dynamic> map) {
     return Activity(
       id: map['id'],
