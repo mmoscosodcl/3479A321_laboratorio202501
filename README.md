@@ -1,6 +1,6 @@
-# application_laboratorio202501
+# Laboratorios 2025 01
 
-A new Flutter project.
+Proyecto de Flutter para realizar ejemplos y seguimiento de los ejercicios solicitados en Laboratorio del módulo.
 
 ## Getting Started
 
