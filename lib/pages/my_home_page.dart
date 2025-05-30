@@ -10,11 +10,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
+  
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -22,9 +24,11 @@ class MyHomePage extends StatefulWidget {
 }
 class _MyHomePageState extends State<MyHomePage> {
   bool _isResetEnabled = false;
+  String _imageUrl = 'https://picsum.photos/250?image=10';
+  String _filter = '';
+  var logger = Logger();
 
   _MyHomePageState() {
-    var logger = Logger();
     logger.d("constructor");
   }
 
@@ -35,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var logger = Logger();
     logger.d("initState");
     _loadPreferences();
+    _getNewImage();
   }
 
   @override
@@ -74,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isResetEnabled = prefs.getBool('isResetEnabled') ?? false;
+      _filter = _isResetEnabled ? '?grayscale' : '';
+      
     });
   }
 
@@ -105,6 +112,31 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
  
+ Future<void> _getNewImage() async {
+    final newImageUrl = 'https://picsum.photos/250?image=${context.read<AppData>().counter}';
+    try {
+      final response = await http.head(Uri.parse(newImageUrl));
+      logger.d("Response status: ${response.headers.toString()}");
+      logger.d("Response status code: ${response.statusCode}");
+      logger.d("New image URL: $newImageUrl");
+      if (response.statusCode == 200  || response.statusCode == 404) {
+        setState(() {
+          _imageUrl = newImageUrl;
+          logger.d("Get new image: $_imageUrl");
+        });
+      } else {
+        setState(() {
+          _imageUrl = ''; // Clear the image URL
+          logger.e("Image not found: $newImageUrl");
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _imageUrl = ''; // Clear the image URL
+        logger.e("Failed to fetch image: $e");
+      });
+    }
+  }
 
 
   @override
@@ -197,6 +229,21 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Image.network(
+                _imageUrl.isNotEmpty ? _imageUrl : '',
+                width: 250,
+                height: 250,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Text(
+                  'Failed to load image $_imageUrl',
+                  style: TextStyle(color: Colors.red),
+                  ),
+                );
+              },
+            ),
+              const SizedBox(height: 20),
               SvgPicture.asset('assets/icons/mobile.svg',semanticsLabel: 'Dart Logo',),
                 Text(
                 context.watch<AppData>().name,
@@ -224,7 +271,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-
   List<Widget> get footerOptions {
     return [
       TextButton(onPressed: context.read<AppData>().increment, child: Icon(Icons.add)),
@@ -232,6 +278,10 @@ class _MyHomePageState extends State<MyHomePage> {
       TextButton(
         onPressed: _isResetEnabled ? context.read<AppData>().resetCounter : null,
         child: Icon(Icons.clean_hands),
+      ),
+      TextButton(
+        onPressed: _getNewImage, // New button to refresh the image
+        child: Icon(Icons.refresh),
       ),
     ];
   }
