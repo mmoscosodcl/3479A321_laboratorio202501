@@ -3,7 +3,10 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencePage extends StatefulWidget {
+  const PreferencePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PreferencePageState createState() => _PreferencePageState();
 }
 
